@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+    <script>
+
+// JavaScript program to find maximum
+// differences between two prime
+// numbers in given ranges
+
+let MAX = 100005;
+
+// Precompute Sieve, Prefix array, Suffix array
+function precompute(prefix, suffix)
+{
+	let prime = [];
+	for(let i = 0; i < MAX; i++)
+	{
+		prime[i] = true;
+	}
+
+	// Sieve of Eratosthenes
+	for(let i = 2; i * i < MAX; i++)
+	{
+		if (prime[i])
+		{
+			for(let j = i * i; j < MAX; j += i)
+			{
+				prime[j] = false;
+			}
+		}
+	}
+
+	prefix[1] = 1;
+	suffix[MAX - 1] = 1e9 + 7;
+
+	// Precomputing Prefix array.
+	for(let i = 2; i < MAX; i++)
+	{
+		if (prime[i])
+		{
+			prefix[i] = i;
+		}
+		else
+		{
+			prefix[i] = prefix[i - 1];
+		}
+	}
+
+	// Precompute Suffix array.
+	for(let i = MAX - 2; i > 1; i--)
+	{
+		if (prime[i])
+		{
+			suffix[i] = i;
+		}
+		else
+		{
+			suffix[i] = suffix[i + 1];
+		}
+	}
+}
+
+// Function to solve each query
+function query(prefix, suffix, L, R)
+{
+	if (prefix[R] < L || suffix[L] > R)
+	{
+		return 0;
+	}
+	else
+	{
+		return prefix[R] - suffix[L];
+	}
+}
+
+// Driver Code
+let q = 3;
+let L = [ 2, 2, 24 ];
+let R = [ 5, 2, 28 ];
+let prefix = [], suffix = [];
+
+precompute(prefix, suffix);
+
+for(let i = 0; i < q; i++)
+{
+	document.write(query(prefix, suffix,
+						L[i], R[i]) + "<br/>");
+}
+
+// This code is contributed by sanjoy_62
+
+</script>
+
+<body>
+    
+</body>
+</html>
